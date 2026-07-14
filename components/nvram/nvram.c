@@ -340,3 +340,237 @@ esp_err_t nvram_set_bios_update_state(bios_update_state_t state) {
     nvs_close(handle);
     return ESP_OK;
 }
+// ====== EXPANDED S3 PARAMETERS ======
+esp_err_t nvram_get_cpu_cores(cpu_cores_t *cores) {
+    nvs_handle_t handle; uint8_t val = CPU_CORES_2;
+    esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READONLY, &handle);
+    if (err == ESP_OK) { nvs_get_u8(handle, "cpu_cores", &val); nvs_close(handle); }
+    *cores = (cpu_cores_t)val; return err;
+}
+esp_err_t nvram_set_cpu_cores(cpu_cores_t cores) {
+    nvs_handle_t handle; esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READWRITE, &handle);
+if (err != ESP_OK) return err;
+    nvs_set_u8(handle, "cpu_cores", (uint8_t)cores);
+    nvs_commit(handle);
+    nvs_close(handle);
+    return ESP_OK;
+}
+esp_err_t nvram_get_psram_speed(psram_speed_t *speed) {
+    nvs_handle_t handle; uint8_t val = PSRAM_120MHZ;
+    esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READONLY, &handle);
+    if (err == ESP_OK) { nvs_get_u8(handle, "psram_spd", &val); nvs_close(handle); }
+    *speed = (psram_speed_t)val; return err;
+}
+esp_err_t nvram_set_psram_speed(psram_speed_t speed) {
+    nvs_handle_t handle; esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READWRITE, &handle);
+if (err != ESP_OK) return err;
+    nvs_set_u8(handle, "psram_spd", (uint8_t)speed);
+    nvs_commit(handle);
+    nvs_close(handle);
+    return ESP_OK;
+}
+esp_err_t nvram_get_psram_mode(psram_mode_t *mode) {
+    nvs_handle_t handle; uint8_t val = PSRAM_OCTAL;
+    esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READONLY, &handle);
+    if (err == ESP_OK) { nvs_get_u8(handle, "psram_mod", &val); nvs_close(handle); }
+    *mode = (psram_mode_t)val; return err;
+}
+esp_err_t nvram_set_psram_mode(psram_mode_t mode) {
+    nvs_handle_t handle; esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READWRITE, &handle);
+if (err != ESP_OK) return err;
+    nvs_set_u8(handle, "psram_mod", (uint8_t)mode);
+    nvs_commit(handle);
+    nvs_close(handle);
+    return ESP_OK;
+}
+esp_err_t nvram_get_wdt_timeout(uint8_t *timeout) {
+    nvs_handle_t handle; uint8_t val = WDT_TIMEOUT_DEFAULT;
+    esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READONLY, &handle);
+    if (err == ESP_OK) { nvs_get_u8(handle, "wdt_to", &val); nvs_close(handle); }
+    *timeout = val; return err;
+}
+esp_err_t nvram_set_wdt_timeout(uint8_t timeout) {
+    nvs_handle_t handle;
+    esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READWRITE, &handle);
+    if (err != ESP_OK) return err;
+    nvs_set_u8(handle, "wdt_to", timeout);
+    nvs_commit(handle);
+    nvs_close(handle);
+    return ESP_OK;
+}
+esp_err_t nvram_get_sleep_wakeup(sleep_wakeup_t *wakeup) {
+    nvs_handle_t handle; uint8_t val = SLEEP_DISABLED;
+    esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READONLY, &handle);
+    if (err == ESP_OK) { nvs_get_u8(handle, "slp_wake", &val); nvs_close(handle); }
+    *wakeup = (sleep_wakeup_t)val; return err;
+}
+esp_err_t nvram_set_sleep_wakeup(sleep_wakeup_t wakeup) {
+    nvs_handle_t handle; esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READWRITE, &handle);
+if (err != ESP_OK) return err;
+    nvs_set_u8(handle, "slp_wake", (uint8_t)wakeup);
+    nvs_commit(handle);
+    nvs_close(handle);
+    return ESP_OK;
+}
+esp_err_t nvram_get_sleep_timer(uint16_t *timer) {
+    nvs_handle_t handle; uint16_t val = SLEEP_TIMER_DEFAULT;
+    esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READONLY, &handle);
+    if (err == ESP_OK) { nvs_get_u16(handle, "slp_tmr", &val); nvs_close(handle); }
+    *timer = val; return err;
+}
+esp_err_t nvram_set_sleep_timer(uint16_t timer) {
+    nvs_handle_t handle;
+    esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READWRITE, &handle);
+    if (err != ESP_OK) return err;
+    nvs_set_u16(handle, "slp_tmr", timer);
+    nvs_commit(handle);
+    nvs_close(handle);
+    return ESP_OK;
+}
+esp_err_t nvram_get_wifi_tx_power(uint8_t *power) {
+    nvs_handle_t handle; uint8_t val = WIFI_TX_POWER_DEFAULT;
+    esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READONLY, &handle);
+    if (err == ESP_OK) { nvs_get_u8(handle, "tx_pwr", &val); nvs_close(handle); }
+    *power = val; return err;
+}
+esp_err_t nvram_set_wifi_tx_power(uint8_t power) {
+    nvs_handle_t handle;
+    esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READWRITE, &handle);
+    if (err != ESP_OK) return err;
+    nvs_set_u8(handle, "tx_pwr", power);
+    nvs_commit(handle);
+    nvs_close(handle);
+    return ESP_OK;
+}
+esp_err_t nvram_get_ap_channel(uint8_t *channel) {
+    nvs_handle_t handle; uint8_t val = AP_CHANNEL_DEFAULT;
+    esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READONLY, &handle);
+    if (err == ESP_OK) { nvs_get_u8(handle, "ap_chan", &val); nvs_close(handle); }
+    *channel = val; return err;
+}
+esp_err_t nvram_set_ap_channel(uint8_t channel) {
+    nvs_handle_t handle;
+    esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READWRITE, &handle);
+    if (err != ESP_OK) return err;
+    nvs_set_u8(handle, "ap_chan", channel);
+    nvs_commit(handle);
+    nvs_close(handle);
+    return ESP_OK;
+}
+esp_err_t nvram_get_hostname(char* name, size_t max_len) {
+    nvs_handle_t handle; esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READONLY, &handle);
+    if (err != ESP_OK) { strncpy(name, VAL_HOSTNAME_DEFAULT, max_len-1); name[max_len-1]='\0'; return ESP_OK; }
+    err = nvs_get_str(handle, "hostname", name, &max_len);
+    if (err != ESP_OK) { strncpy(name, VAL_HOSTNAME_DEFAULT, max_len-1); name[max_len-1]='\0'; }
+    nvs_close(handle); return ESP_OK;
+}
+esp_err_t nvram_set_hostname(const char* name) {
+    nvs_handle_t handle;
+    esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READWRITE, &handle);
+    if (err != ESP_OK) return err;
+    nvs_set_str(handle, "hostname", name);
+    nvs_commit(handle);
+    nvs_close(handle);
+    return ESP_OK;
+}
+esp_err_t nvram_get_boot_order(boot_order_t *order) {
+    nvs_handle_t handle; uint8_t val = BOOT_ORDER_FLASH;
+    esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READONLY, &handle);
+    if (err == ESP_OK) { nvs_get_u8(handle, "boot_ord", &val); nvs_close(handle); }
+    *order = (boot_order_t)val; return err;
+}
+esp_err_t nvram_set_boot_order(boot_order_t order) {
+    nvs_handle_t handle; esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READWRITE, &handle);
+if (err != ESP_OK) return err;
+    nvs_set_u8(handle, "boot_ord", (uint8_t)order);
+    nvs_commit(handle);
+    nvs_close(handle);
+    return ESP_OK;
+}
+esp_err_t nvram_get_boot_timeout(uint8_t *timeout) {
+    nvs_handle_t handle; uint8_t val = BOOT_TIMEOUT_DEFAULT;
+    esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READONLY, &handle);
+    if (err == ESP_OK) { nvs_get_u8(handle, "boot_to", &val); nvs_close(handle); }
+    *timeout = val; return err;
+}
+esp_err_t nvram_set_boot_timeout(uint8_t timeout) {
+    nvs_handle_t handle;
+    esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READWRITE, &handle);
+    if (err != ESP_OK) return err;
+    nvs_set_u8(handle, "boot_to", timeout);
+    nvs_commit(handle);
+    nvs_close(handle);
+    return ESP_OK;
+}
+esp_err_t nvram_get_uart_baud(uart_baud_t *baud) {
+    nvs_handle_t handle; uint32_t val = UART_BAUD_115200;
+    esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READONLY, &handle);
+    if (err == ESP_OK) { nvs_get_u32(handle, "uart_bd", &val); nvs_close(handle); }
+    *baud = (uart_baud_t)val; return err;
+}
+esp_err_t nvram_set_uart_baud(uart_baud_t baud) {
+    nvs_handle_t handle; esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READWRITE, &handle);
+if (err != ESP_OK) return err;
+    nvs_set_u32(handle, "uart_bd", (uint32_t)baud);
+    nvs_commit(handle);
+    nvs_close(handle);
+    return ESP_OK;
+}
+esp_err_t nvram_get_usb_serial(usb_serial_t *enabled) {
+    nvs_handle_t handle; uint8_t val = USB_SERIAL_ENABLED;
+    esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READONLY, &handle);
+    if (err == ESP_OK) { nvs_get_u8(handle, "usb_ser", &val); nvs_close(handle); }
+    *enabled = (usb_serial_t)val; return err;
+}
+esp_err_t nvram_set_usb_serial(usb_serial_t enabled) {
+    nvs_handle_t handle; esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READWRITE, &handle);
+if (err != ESP_OK) return err;
+    nvs_set_u8(handle, "usb_ser", (uint8_t)enabled);
+    nvs_commit(handle);
+    nvs_close(handle);
+    return ESP_OK;
+}
+esp_err_t nvram_get_secure_boot(secure_boot_t *enabled) {
+    nvs_handle_t handle; uint8_t val = SECURE_BOOT_DISABLED;
+    esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READONLY, &handle);
+    if (err == ESP_OK) { nvs_get_u8(handle, "sec_boot", &val); nvs_close(handle); }
+    *enabled = (secure_boot_t)val; return err;
+}
+esp_err_t nvram_set_secure_boot(secure_boot_t enabled) {
+    nvs_handle_t handle; esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READWRITE, &handle);
+if (err != ESP_OK) return err;
+    nvs_set_u8(handle, "sec_boot", (uint8_t)enabled);
+    nvs_commit(handle);
+    nvs_close(handle);
+    return ESP_OK;
+}
+esp_err_t nvram_get_flash_encrypt(flash_encrypt_t *enabled) {
+    nvs_handle_t handle; uint8_t val = FLASH_ENCRYPT_DISABLED;
+    esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READONLY, &handle);
+    if (err == ESP_OK) { nvs_get_u8(handle, "flash_enc", &val); nvs_close(handle); }
+    *enabled = (flash_encrypt_t)val; return err;
+}
+esp_err_t nvram_set_flash_encrypt(flash_encrypt_t enabled) {
+    nvs_handle_t handle;
+    esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READWRITE, &handle);
+    if (err != ESP_OK) return err;
+    nvs_set_u8(handle, "flash_enc", (uint8_t)enabled);
+    nvs_commit(handle);
+    nvs_close(handle);
+    return ESP_OK;
+}
+esp_err_t nvram_get_gpio_drive(gpio_drive_t *drive) {
+    nvs_handle_t handle; uint8_t val = GPIO_DRIVE_20MA;
+    esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READONLY, &handle);
+    if (err == ESP_OK) { nvs_get_u8(handle, "gpio_drv", &val); nvs_close(handle); }
+    *drive = (gpio_drive_t)val; return err;
+}
+esp_err_t nvram_set_gpio_drive(gpio_drive_t drive) {
+    nvs_handle_t handle;
+    esp_err_t err = nvs_open(BIOS_NVS_NAMESPACE, NVS_READWRITE, &handle);
+    if (err != ESP_OK) return err;
+    nvs_set_u8(handle, "gpio_drv", (uint8_t)drive);
+    nvs_commit(handle);
+    nvs_close(handle);
+    return ESP_OK;
+}

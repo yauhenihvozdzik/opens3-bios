@@ -26,34 +26,32 @@ add_custom_command(TARGET OPENS3_loader POST_BUILD
 # 2. TARGET PAYLOAD COMPILATION (for ESP32-C6 RISC-V)
 # ==============================================================================
 
-# Search for the ESP-IDF cross-compiler in environment variables (export.sh must be activated)
-find_program(RISCV_GCC riscv32-esp-elf-gcc)
-find_program(RISCV_OBJCOPY riscv32-esp-elf-objcopy)
+# Search for the ESP-IDF Xtensa cross-compiler for ESP32-S3
+find_program(XTENSA_GCC xtensa-esp32s3-elf-gcc)
+find_program(XTENSA_OBJCOPY xtensa-esp32s3-elf-objcopy)
 
-if(RISCV_GCC AND RISCV_OBJCOPY)
-    message(STATUS "Found ESP-IDF RISC-V Toolchain: ${RISCV_GCC}")
+if(XTENSA_GCC AND XTENSA_OBJCOPY)
+    message(STATUS "Found ESP-IDF Xtensa Toolchain: ${XTENSA_GCC}")
     message(STATUS "Using ABI Include Path: ${ABI_INCLUDE_DIR}")
 
     set(PAYLOAD_SRC "${CMAKE_CURRENT_SOURCE_DIR}/example/payload.c")
     set(PAYLOAD_LD  "${CMAKE_CURRENT_SOURCE_DIR}/payload.ld")
     set(PAYLOAD_ELF "${CMAKE_CURRENT_BINARY_DIR}/payload.elf")
-    set(PAYLOAD_BIN "${CMAKE_CURRENT_SOURCE_DIR}/payload.bin") # Places payload.bin directly into tools/ root
+    set(PAYLOAD_BIN "${CMAKE_CURRENT_SOURCE_DIR}/payload.bin")
 
-    # Custom command calling the ESP compiler with specific bare-metal flags and ABI include path
+    # Compile bare-metal Xtensa payload for ESP32-S3
     add_custom_command(
         OUTPUT ${PAYLOAD_BIN}
-        COMMAND ${RISCV_GCC} -march=rv32imac -mabi=ilp32 -Os -fPIC -fno-jump-tables -fno-tree-switch-conversion -nostdlib
+        COMMAND ${XTENSA_GCC} -mlongcalls -Os -fPIC -fno-jump-tables -nostdlib
                              -I${ABI_INCLUDE_DIR}
-                             -Wl,-T,${PAYLOAD_LD} -Wl,--no-warn-rwx-segments
+                             -Wl,-T,${PAYLOAD_LD}
                              -o ${PAYLOAD_ELF} ${PAYLOAD_SRC}
-        COMMAND ${RISCV_OBJCOPY} -O binary ${PAYLOAD_ELF} ${PAYLOAD_BIN}
+        COMMAND ${XTENSA_OBJCOPY} -O binary ${PAYLOAD_ELF} ${PAYLOAD_BIN}
         DEPENDS ${PAYLOAD_SRC} ${PAYLOAD_LD}
-        COMMENT "Compiling and building bare-metal Payload for OPENS3 BIOS..."
+        COMMENT "Compiling bare-metal Xtensa Payload for OPENS3 BIOS..."
     )
 
-    # Define target so CMake knows to build the payload
     add_custom_target(payload ALL DEPENDS ${PAYLOAD_BIN})
-
 else()
-    message(WARNING "ESP-IDF Toolchain NOT FOUND! Run '. $IDF_PATH/export.sh' first! Payload will not be built.")
+    message(WARNING "Xtensa ESP32-S3 Toolchain NOT FOUND! Run ESP-IDF export.sh first!")
 endif()

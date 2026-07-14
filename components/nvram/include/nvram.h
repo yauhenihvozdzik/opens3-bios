@@ -87,3 +87,37 @@ esp_err_t nvram_set_thermal_limits(uint8_t throttle, uint8_t emergency);
 esp_err_t nvram_get_bios_update_state(bios_update_state_t *state);
 esp_err_t nvram_set_bios_update_state(bios_update_state_t state);
 
+
+// ====== EXPANDED S3 PARAMETERS ======
+esp_err_t nvram_get_cpu_cores(cpu_cores_t *cores);
+esp_err_t nvram_set_cpu_cores(cpu_cores_t cores);
+esp_err_t nvram_get_psram_speed(psram_speed_t *speed);
+esp_err_t nvram_set_psram_speed(psram_speed_t speed);
+esp_err_t nvram_get_psram_mode(psram_mode_t *mode);
+esp_err_t nvram_set_psram_mode(psram_mode_t mode);
+esp_err_t nvram_get_wdt_timeout(uint8_t *timeout);
+esp_err_t nvram_set_wdt_timeout(uint8_t timeout);
+esp_err_t nvram_get_sleep_wakeup(sleep_wakeup_t *wakeup);
+esp_err_t nvram_set_sleep_wakeup(sleep_wakeup_t wakeup);
+esp_err_t nvram_get_sleep_timer(uint16_t *timer);
+esp_err_t nvram_set_sleep_timer(uint16_t timer);
+esp_err_t nvram_get_wifi_tx_power(uint8_t *power);
+esp_err_t nvram_set_wifi_tx_power(uint8_t power);
+esp_err_t nvram_get_ap_channel(uint8_t *channel);
+esp_err_t nvram_set_ap_channel(uint8_t channel);
+esp_err_t nvram_get_hostname(char* name, size_t max_len);
+esp_err_t nvram_set_hostname(const char* name);
+esp_err_t nvram_get_boot_order(boot_order_t *order);
+esp_err_t nvram_set_boot_order(boot_order_t order);
+esp_err_t nvram_get_boot_timeout(uint8_t *timeout);
+esp_err_t nvram_set_boot_timeout(uint8_t timeout);
+esp_err_t nvram_get_uart_baud(uart_baud_t *baud);
+esp_err_t nvram_set_uart_baud(uart_baud_t baud);
+esp_err_t nvram_get_usb_serial(usb_serial_t *enabled);
+esp_err_t nvram_set_usb_serial(usb_serial_t enabled);
+esp_err_t nvram_get_secure_boot(secure_boot_t *enabled);
+esp_err_t nvram_set_secure_boot(secure_boot_t enabled);
+esp_err_t nvram_get_flash_encrypt(flash_encrypt_t *enabled);
+esp_err_t nvram_set_flash_encrypt(flash_encrypt_t enabled);
+esp_err_t nvram_get_gpio_drive(gpio_drive_t *drive);
+esp_err_t nvram_set_gpio_drive(gpio_drive_t drive);

@@ -5,73 +5,60 @@
 
 static const char *TAG = "NVRAM_DEF";
 
-/**
- * @brief Performs a factory reset on BIOS settings (Load Setup Defaults).
- * Wipes the active NVS partition completely and provisions safe default parameters for all subsystems.
- */
-esp_err_t nvram_load_defaults(void)
-{
+esp_err_t nvram_load_defaults(void) {
     ESP_LOGW(TAG, "Initiating BIOS Factory Reset (Clear CMOS)...");
 
-    // 1. Wipe the NVS partition completely (deletes all namespaces and key-value entries)
     esp_err_t err = nvs_flash_erase();
-    if (err != ESP_OK) {
-        ESP_LOGE(TAG, "Failed to erase NVS partition: %s", esp_err_to_name(err));
-        return err;
-    }
+    if (err != ESP_OK) { ESP_LOGE(TAG, "Failed to erase NVS: %s", esp_err_to_name(err)); return err; }
 
-    // 2. Re-initialize NVS partition space after erasure
     err = nvram_init();
-    if (err != ESP_OK) {
-        return err;
-    }
+    if (err != ESP_OK) return err;
 
-    // 3. Write default values for primary system configurations
-    ESP_LOGI(TAG, "Setting Default: DC_LOSS_ACTION = POWER_OFF");
+    // Basic
     nvram_set_dc_loss_action(DC_LOSS_POWER_OFF);
-
-    ESP_LOGI(TAG, "Setting Default: POST_LED_MODE = ENABLED");
     nvram_set_post_led_mode(POST_LED_ENABLED);
-
-    // 4. Write default configurations for Aura Sync RGB
-    ESP_LOGI(TAG, "Setting Default: AURA_MODE = RAINBOW");
     nvram_set_aura_mode(AURA_RAINBOW);
-
-    ESP_LOGI(TAG, "Setting Default: AURA_BRIGHTNESS = 128 (50%%)");
     nvram_set_aura_brightness(128);
 
-    // 5. AI TWEAKER: CPU Frequency & Power profiles configuration
-    ESP_LOGI(TAG, "Setting Default: CPU_FREQ = 160 MHz (Turbo)");
-    nvram_set_cpu_freq(CPU_FREQ_160MHZ);
-
-    // Set CPU Governor mode to DYNAMIC by default for SchedUtil load scaling support
-    ESP_LOGI(TAG, "Setting Default: CPU_GOVERNOR = DYNAMIC");
+    // AI Tweaker
+    nvram_set_cpu_freq(CPU_FREQ_240MHZ);
     nvram_set_cpu_governor(GOV_DYNAMIC);
-
-    ESP_LOGI(TAG, "Setting Default: BOD_LEVEL = STRICT (2.8V)");
     nvram_set_bod_level(BOD_STRICT);
-
-    // Write thermal throttling and safety limit defaults
-    ESP_LOGI(TAG, "Setting Default: Thermal Limits (Throttle=55C, Emergency=75C)");
+    nvram_set_cpu_cores(CPU_CORES_2);
+    nvram_set_psram_speed(PSRAM_120MHZ);
+    nvram_set_psram_mode(PSRAM_OCTAL);
     nvram_set_thermal_limits(VAL_TEMP_THROTTLE_DEFAULT, VAL_TEMP_EMERGENCY_DEFAULT);
 
-    // 6. Purge existing station Wi-Fi network credentials
-    ESP_LOGI(TAG, "Setting Default: Clearing WiFi credentials");
-    nvram_set_wifi_sta_config("", "");
-
-    // Commit default PXE target server path URL
-    ESP_LOGI(TAG, "Setting Default: PXE_URL = %s", VAL_PXE_URL_DEFAULT);
-    nvram_set_pxe_url(VAL_PXE_URL_DEFAULT);
-
-    // Reset pending wireless BIOS OTA firmware update state flag to NONE
-    ESP_LOGI(TAG, "Setting Default: BIOS_UPDATE_STATE = NONE");
-    nvram_set_bios_update_state(BIOS_UPDATE_NONE);
-
-    // 7. Management Engine (ME) baseline state
-    ESP_LOGI(TAG, "Setting Default: ME_STATE = ENABLED");
+    // ME
     nvram_set_me_state(ME_ENABLED);
+    nvram_set_wdt_timeout(WDT_TIMEOUT_DEFAULT);
 
-    ESP_LOGI(TAG, "BIOS Setup Defaults loaded successfully.");
+    // Sleep
+    nvram_set_sleep_wakeup(SLEEP_DISABLED);
+    nvram_set_sleep_timer(SLEEP_TIMER_DEFAULT);
 
+    // Network
+    nvram_set_wifi_sta_config("", "");
+    nvram_set_pxe_url(VAL_PXE_URL_DEFAULT);
+    nvram_set_hostname(VAL_HOSTNAME_DEFAULT);
+    nvram_set_wifi_tx_power(WIFI_TX_POWER_DEFAULT);
+    nvram_set_ap_channel(AP_CHANNEL_DEFAULT);
+
+    // Boot
+    nvram_set_boot_order(BOOT_ORDER_FLASH);
+    nvram_set_boot_timeout(BOOT_TIMEOUT_DEFAULT);
+
+    // Console
+    nvram_set_uart_baud(UART_BAUD_115200);
+    nvram_set_usb_serial(USB_SERIAL_ENABLED);
+
+    // Security
+    nvram_set_secure_boot(SECURE_BOOT_DISABLED);
+    nvram_set_flash_encrypt(FLASH_ENCRYPT_DISABLED);
+
+    // GPIO
+    nvram_set_gpio_drive(GPIO_DRIVE_20MA);
+
+    ESP_LOGI(TAG, "BIOS Setup Defaults loaded (28 params).");
     return ESP_OK;
 }
